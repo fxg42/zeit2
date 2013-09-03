@@ -3,13 +3,14 @@ Zeit
 
 Simple time tracking utility.
 
-Setup
+Setting up and running
 --------------------------------------------------------------------------------
 
 ```
-$ npm install
-$ grunt
-
 mongo> db.createCollection('frames');
 mongo> db.frames.insert({user:'default', frames:[]})
+
+$ npm install
+$ grunt
+$ node app.js
 ```
