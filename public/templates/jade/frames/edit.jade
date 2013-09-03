@@ -1,0 +1,81 @@
+.container
+  .row
+    .page-header
+      h1
+        a(href="/") Zeit
+        small  Keeping track of&hellip; 
+        small(contenteditable="true", ng-model="frame.name")
+        .btn-group.pull-right
+          button.btn.btn-sm.btn-default(ng-click="saveFrame()", ng-class="{disabled: saving}") Save this frame
+          button.btn.btn-sm.btn-default(ng-click="cloneFrame()") Clone this frame
+          button.btn.btn-sm.btn-primary(ng-click="startNewProject()") Start new project
+  .row(sortable, sortable-handle=".icon-reorder", ng-model="frame.projects")
+    .panel.panel-default(ng-repeat="project in frame.projects")
+      .panel-heading
+        i.icon-reorder
+        h5(contenteditable="true", ng-model="project.name")
+        .btn-group
+          button.btn.btn-xs.btn-default.btn-remove(confirmation, yep="removeProjectAt($index)") rm
+        .pull-right
+          button.btn.btn-xs.btn-primary(ng-click="startNewTask(project)") start new task
+      .list-group(sortable, sortable-handle=".icon-reorder", ng-model="project.tasks")
+        a.list-group-item(ng-repeat="task in project.tasks", ng-click="playPause(task)", ng-class="{active: isActive(task)}")
+          i.icon-reorder
+          span(contenteditable="true", ng-model="task.name")
+          .btn-group(ng-show="canRemoveTasks(project)")
+            button.btn.btn-xs.btn-default.btn-edit(ng-click='editTask(task); $event.stopPropagation();') ed
+            button.btn.btn-xs.btn-default.btn-remove(confirmation, yep='removeTaskAt($index, project)') rm
+          .btn-group(ng-show="! canRemoveTasks(project)")
+            button.btn.btn-xs.btn-default.btn-edit(ng-click='editTask(task); $event.stopPropagation();') ed
+          span.badge
+            span(ng-show="! isActive(task)") {{ timeSpent(task) | duration }}
+            span(ng-show="isActive(task)"): i.icon-spinner.icon-spin
+
+  .row(ng-controller='SummaryController', ng-show="frame.projects.length > 0")
+    hr
+    table.table.table-bordered.table-hover.table-striped(style="font-size:0.8em")
+      thead
+        tr
+          th(rowspan=2, width="7%")
+          th(ng-repeat="project in frame.projects", colspan="{{project.tasks.length}}") {{project.name}}
+          th(rowspan=2, width="4%") Total
+        tr
+          th(ng-repeat="task in allTasks", width="{{89/allTasks.length}}%") {{task.name}}
+      tbody
+        tr(ng-repeat="date in allDates")
+          td {{date}}
+          td(ng-repeat="task in allTasks") {{ timeSpentOnDateDoingTask(date, task) | number:2}}
+          td {{ timeSpentOnDate(date) | number:2 }}
+      tfoot
+        tr
+          th Total
+          th(ng-repeat="task in allTasks") {{ timeSpentDoingTask(task) | number:2 }}
+          th {{ timeSpent() | number:2 }}
+
+.modal.fade(tab-index='-1', role='dialog'): .modal-dialog: .modal-content
+  .modal-header
+    button.close(data-dismiss='modal')&times;
+    h4.modal-title Edit task "{{editedTask.name}}"
+  .modal-body
+    form(role="form")
+      .form-group
+        label Task name
+        input.form-control(type="text", ng-model="editedTask.name")
+    table.table.table-striped
+      thead
+        th From
+        th To
+        th(width="60px")
+          button.btn.btn-xs.btn-primary(ng-click='addEntry(editedTask)') add 1
+      tbody
+        tr(ng-repeat="entry in editedTask.entries")
+          td: input.input-sm.form-control(type="datetime-local", ng-model="entry.start")
+          td: input.input-sm.form-control(type="datetime-local", ng-model="entry.end")
+          td
+            button.btn.btn-xs.btn-default.btn-remove(confirmation, yep='removeEntryAt($index, editedTask)')
+              i.icon-remove
+              |  rm
+      tfoot
+        th(colspan=3)
+          .pull-right(ng-show="editedTask.entries.length > 1")
+            button.btn.btn-xs.btn-warning(confirmation, yep='clearEntries(editedTask)') clear all

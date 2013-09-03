@@ -1,0 +1,22 @@
+.container
+  .row
+    .page-header
+      h1 Zeit 
+        small Keeping track of&hellip;
+  .row
+    .panel.panel-default
+      .panel-heading
+        h5 &nbsp;
+        .pull-right
+          button.btn.btn-xs.btn-primary(ng-click="createNew()") create new frame
+      .list-group
+        a.list-group-item(ng-repeat="frame in frames", ng-click="editFrame(frame)")
+          | {{ frame.name }} 
+          .btn-group
+            button.btn.btn-xs.btn-default.btn-remove(confirmation, yep='removeFrameAt($index)') rm
+          .pull-right
+            .badge.badge-default(ng-pluralize, count="frame.projects.length", when="{'one': '1 project', 'other': '{} projects'}")
+            | 
+            .badge.badge-default(ng-pluralize, count="nbOfTasks(frame)", when="{'one': '1 task', 'other': '{} tasks'}")
+            | 
+            .badge.badge-default {{ recordedTimeSpan(frame) | duration }}
