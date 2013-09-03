@@ -1,5 +1,5 @@
 node_modules
 public/templates/frames/
-public/stylesheets/styles.css
+public/stylesheets/style.css
 public/javascripts/app/build
 public/javascripts/app/dist
