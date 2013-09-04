@@ -7,4 +7,5 @@
 i.icon-reorder{margin-right:10px;cursor:-webkit-grab}
 thead th{text-align:center}
 tbody td:nth-child(n+2){text-align:right}
+tbody td:last-child{font-weight:bold}
 tfoot th:nth-child(n+2){text-align:right}

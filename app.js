@@ -14,7 +14,7 @@ var mongodb = require('mongodb');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3333);
+app.set('port', process.env.PORT || 8888);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
