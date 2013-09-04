@@ -32,15 +32,26 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
     project.tasks.unshift newTask
     $scope.playPause newTask
 
+  pauseActiveTask = ->
+    $scope.activeTask.entries.unshift
+      start: $scope.activeEntry.start
+      end: now()
+
+  startNewActiveTask = (task) ->
+    $scope.activeTask = task
+    $scope.activeEntry =
+      start: now()
+
   $scope.playPause = (task) ->
-    if task is $scope.activeTask
-      $scope.activeEntry.end = now()
-      $scope.activeTask = null
+    if $scope.activeEntry
+      pauseActiveTask()
+      if $scope.isActive(task)
+        $scope.activeTask = null
+        $scope.activeEntry = null
+      else
+        startNewActiveTask(task)
     else
-      $scope.activeEntry.end = now() if $scope.activeEntry?
-      $scope.activeEntry = { start: now() }
-      task.entries.unshift $scope.activeEntry
-      $scope.activeTask = task
+      startNewActiveTask(task)
 
   $scope.isActive = (task) ->
     task is $scope.activeTask
