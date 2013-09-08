@@ -109,7 +109,7 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
 
   $scope.cloneFrame = ->
     cloneFrame =
-      name: $scope.frame.name
+      name: $scope.frame.name + '*'
       projects: []
     for project in $scope.frame.projects
       cloneProject =
