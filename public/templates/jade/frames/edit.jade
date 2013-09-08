@@ -63,12 +63,14 @@
         input.form-control(type="text", ng-model="editedTask.name")
     table.table.table-striped
       thead
+        th Notes
         th From
         th To
         th(width="60px")
           button.btn.btn-xs.btn-primary(ng-click='addEntry(editedTask)') add 1
       tbody
         tr(ng-repeat="entry in editedTask.entries")
+          td: input.input-sm.form-control(type="text", ng-model="entry.notes")
           td: input.input-sm.form-control(type="datetime-local", ng-model="entry.start")
           td: input.input-sm.form-control(type="datetime-local", ng-model="entry.end")
           td
@@ -76,6 +78,6 @@
               i.icon-remove
               |  rm
       tfoot
-        th(colspan=3)
+        th(colspan=4)
           .pull-right(ng-show="editedTask.entries.length > 1")
             button.btn.btn-xs.btn-warning(confirmation, yep='clearEntries(editedTask)') clear all
