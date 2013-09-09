@@ -65,6 +65,12 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
       ms += (new Date(entry.end) - new Date(entry.start))
     ms
 
+  $scope.timeSpentOnProject = (project) ->
+    ms = 0
+    for task in project.tasks
+      ms += $scope.timeSpent task
+    ms
+
   $scope.cloneProject = (project, index) ->
     cloneProject =
       name: project.name

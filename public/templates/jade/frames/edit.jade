@@ -16,8 +16,9 @@
         h5(contenteditable="true", ng-model="project.name")
         .btn-group
           button.btn.btn-xs.btn-default.btn-remove(confirmation, yep="removeProjectAt($index)") rm
-        .pull-right
           button.btn.btn-xs.btn-primary(ng-click="startNewTask(project)") start new task
+        .pull-right
+          span.badge {{ timeSpentOnProject(project) | duration }}
       .list-group(sortable, sortable-handle=".icon-reorder", ng-model="project.tasks")
         a.list-group-item(ng-repeat="task in project.tasks", ng-click="playPause(task)", ng-class="{active: isActive(task)}")
           i.icon-reorder
