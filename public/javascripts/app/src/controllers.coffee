@@ -87,6 +87,18 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
       entries: []
     project.tasks.splice(index, 0, cloneTask)
 
+  $scope.mergeTasks = (project) ->
+    $scope.mergeableProject = project
+    $scope.mergeableTasks = []
+    for task, index in project.tasks
+      $scope.mergeableTasks.push
+        name: task.name
+        duration: $scope.timeSpent(task)
+        index: index
+        mergeSrc: no
+        mergeDst: no
+    $('#merge-modal').modal('toggle')
+
   $scope.removeProjectAt = (index) ->
     $scope.frame.projects.splice(index, 1)
 
@@ -101,7 +113,7 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
 
   $scope.editTask = (task) ->
     $scope.editedTask = task
-    $('.modal').modal('toggle')
+    $('#edit-modal').modal('toggle')
 
   $scope.addEntry = (task) ->
     task.entries.unshift
@@ -233,3 +245,34 @@ app.controller 'FrameCollectionController', ($scope, $location, Frames) ->
 
   Frames.list (frames) ->
     $scope.frames = frames
+
+app.controller 'MergeController', ($scope) ->
+  $scope.toggleSrc = (task) ->
+    task.mergeSrc = not task.mergeSrc
+
+  $scope.toggleDst = (task) ->
+    if task.mergeDst
+      task.mergeDst = no
+    else
+      each.mergeDst = no for each in $scope.mergeableTasks
+      task.mergeDst = not task.mergeDst
+
+  $scope.canMerge = ->
+    src = no
+    dst = no
+    if $scope.mergeableTasks?.length
+      for task in $scope.mergeableTasks
+        src = yes if task.mergeSrc
+        dst = yes if task.mergeDst
+    src and dst
+
+  $scope.merge = ->
+    if $scope.canMerge()
+      mergeDst = (task for task in $scope.mergeableTasks when task.mergeDst)[0]
+      dst = $scope.mergeableProject.tasks[mergeDst.index]
+      for mergeSrc in $scope.mergeableTasks when mergeSrc.mergeSrc and mergeSrc.index isnt mergeDst.index
+        src = $scope.mergeableProject.tasks[mergeSrc.index]
+        dst.entries = dst.entries.concat src.entries
+        src.shouldRemove = yes
+      $scope.mergeableProject.tasks = (task for task in $scope.mergeableProject.tasks when not task.shouldRemove)
+    $('#merge-modal').modal('hide')
