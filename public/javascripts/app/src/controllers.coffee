@@ -87,6 +87,17 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
       entries: []
     project.tasks.splice(index, 0, cloneTask)
 
+  $scope.mergeProjects = (projectIndex) ->
+    $scope.mergeableProjects = []
+    for project, index in $scope.frame.projects
+      $scope.mergeableProjects.push
+        name: project.name
+        duration: $scope.timeSpentOnProject project
+        index: index
+        mergeSrc: projectIndex is index
+        mergeDst: projectIndex is index
+    $('#merge-projects-modal').modal('toggle')
+
   $scope.mergeTasks = (project, taskIndex) ->
     $scope.mergeableProject = project
     $scope.mergeableTasks = []
@@ -97,7 +108,7 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
         index: index
         mergeSrc: taskIndex is index
         mergeDst: taskIndex is index
-    $('#merge-modal').modal('toggle')
+    $('#merge-tasks-modal').modal('toggle')
 
   $scope.removeProjectAt = (index) ->
     $scope.frame.projects.splice(index, 1)
@@ -246,7 +257,38 @@ app.controller 'FrameCollectionController', ($scope, $location, Frames) ->
   Frames.list (frames) ->
     $scope.frames = frames
 
-app.controller 'MergeController', ($scope) ->
+app.controller 'MergeProjectsController', ($scope) ->
+  $scope.toggleSrc = (project) ->
+    project.mergeSrc = not project.mergeSrc
+
+  $scope.toggleDst = (project) ->
+    if project.mergeDst
+      project.mergeDst = no
+    else
+      each.mergeDst = no for each in $scope.mergeableProjects
+      project.mergeDst = not project.mergeDst
+
+  $scope.canMerge = ->
+    src = no
+    dst = no
+    if $scope.mergeableProjects?.length
+      for project in $scope.mergeableProjects
+        src = yes if project.mergeSrc
+        dst = yes if project.mergeDst
+    src and dst
+
+  $scope.merge = ->
+    if $scope.canMerge()
+      mergeDst = (project for project in $scope.mergeableProjects when project.mergeDst)[0]
+      dst = $scope.frame.projects[mergeDst.index]
+      for mergeSrc in $scope.mergeableProjects when mergeSrc.mergeSrc and mergeSrc.index isnt mergeDst.index
+        src = $scope.frame.projects[mergeSrc.index]
+        dst.tasks = dst.tasks.concat src.tasks
+        src.shouldRemove = yes
+      $scope.frame.projects = (project for project in $scope.frame.projects when not project.shouldRemove)
+    $('#merge-projects-modal').modal('hide')
+
+app.controller 'MergeTasksController', ($scope) ->
   $scope.toggleSrc = (task) ->
     task.mergeSrc = not task.mergeSrc
 
@@ -275,4 +317,4 @@ app.controller 'MergeController', ($scope) ->
         dst.entries = dst.entries.concat src.entries
         src.shouldRemove = yes
       $scope.mergeableProject.tasks = (task for task in $scope.mergeableProject.tasks when not task.shouldRemove)
-    $('#merge-modal').modal('hide')
+    $('#merge-tasks-modal').modal('hide')

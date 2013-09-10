@@ -15,6 +15,7 @@
         i.icon-reorder
         h5(contenteditable="true", ng-model="project.name")
         .btn-group
+          button.btn.btn-xs.btn-default.btn-edit(ng-click="mergeProjects($index)") cat
           button.btn.btn-xs.btn-default.btn-remove(confirmation, yep="removeProjectAt($index)") rm
         .pull-right
           span.badge {{ timeSpentOnProject(project) | duration }}
@@ -54,10 +55,35 @@
           th(ng-repeat="task in allTasks") {{ timeSpentDoingTask(task) | number:2 }}
           th {{ timeSpent() | number:2 }}
 
-#merge-modal.modal.fade(ng-controller='MergeController', tab-index='-1', role='dialog'):.modal-dialog: .modal-content
+#merge-projects-modal.modal.fade(ng-controller='MergeProjectsController', tab-index='-1', role='dialog'):.modal-dialog: .modal-content
   .modal-header
     button.close(data-dismiss='modal')&times;
-    h4.modal-title Merge tasks from project "{{ mergeableProject.name }}"
+    h4.modal-title Merge projects in frame "{{ $scope.frame.name }}"
+  .modal-body
+    .container
+      .row
+        .col-xs-6
+          .panel.panel-default
+            .panel-heading: h5 Merge&hellip;
+            .list-group
+              a.list-group-item(ng-repeat="project in mergeableProjects", ng-click="toggleSrc(project)", ng-class="{active: project.mergeSrc}")
+                span {{ project.name }}
+                span.badge {{ project.duration | duration }}
+        .col-xs-6
+          .panel.panel-default
+            .panel-heading: h5 Into&hellip;
+            .list-group
+              a.list-group-item(ng-repeat="project in mergeableProjects", ng-click="toggleDst(project)", ng-class="{active: project.mergeDst}")
+                span {{ project.name }}
+                span.badge {{ project.duration | duration }}
+  .modal-footer
+    button.btn.btn-sm.btn-link(data-dismiss='modal') close
+    button.btn.btn-sm.btn-default(confirmation, yep="merge()", ng-disabled="! $parent.canMerge()") Merge
+
+#merge-tasks-modal.modal.fade(ng-controller='MergeTasksController', tab-index='-1', role='dialog'):.modal-dialog: .modal-content
+  .modal-header
+    button.close(data-dismiss='modal')&times;
+    h4.modal-title Merge tasks in project "{{ mergeableProject.name }}"
   .modal-body
     .container
       .row
