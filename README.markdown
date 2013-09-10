@@ -11,7 +11,9 @@ mongo> use timetrack;
 mongo> db.createCollection('frames');
 mongo> db.frames.insert({user:'default', frames:[]})
 
-$ npm install coffee-script --global
+$ npm install -g coffee-script
+$ npm install -g grunt-cli
+
 $ npm install
 $ grunt
 $ node app.js
