@@ -14,11 +14,11 @@ app.directive 'confirmation', ->
         </div>
       "
     el.bind 'click', (ev) ->
-      el.next().find('button.btn-success').on 'click', (ev) ->
+      el.next('.popover').find('button.btn-success').on 'click', (ev) ->
         scope.$apply -> scope.yep()
         el.popover('hide')
         ev.stopPropagation()
-      el.next().find('button.btn-warning').on 'click', (ev) ->
+      el.next('.popover').find('button.btn-warning').on 'click', (ev) ->
         el.popover('hide')
         ev.stopPropagation()
       ev.stopPropagation()

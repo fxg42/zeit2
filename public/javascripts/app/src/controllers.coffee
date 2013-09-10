@@ -87,7 +87,7 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
       entries: []
     project.tasks.splice(index, 0, cloneTask)
 
-  $scope.mergeTasks = (project) ->
+  $scope.mergeTasks = (project, taskIndex) ->
     $scope.mergeableProject = project
     $scope.mergeableTasks = []
     for task, index in project.tasks
@@ -95,8 +95,8 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
         name: task.name
         duration: $scope.timeSpent(task)
         index: index
-        mergeSrc: no
-        mergeDst: no
+        mergeSrc: taskIndex is index
+        mergeDst: taskIndex is index
     $('#merge-modal').modal('toggle')
 
   $scope.removeProjectAt = (index) ->
