@@ -56,9 +56,6 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
   $scope.isActive = (task) ->
     task is $scope.activeTask
 
-  $scope.canRemoveTasks = (project) ->
-    project.tasks.length > 1
-
   $scope.timeSpent = (task) ->
     ms = 0
     for entry in task.entries when entry.end and entry.start
