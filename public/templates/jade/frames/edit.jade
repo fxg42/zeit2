@@ -27,10 +27,12 @@
           span(contenteditable="true", ng-model="task.name")
           .btn-group(ng-show="canRemoveTasks(project)")
             button.btn.btn-xs.btn-default.btn-edit(ng-click='editTask(task); $event.stopPropagation();') vi
+            button.btn.btn-xs.btn-default.btn-edit(ng-click='cloneTask(task, project, $index); $event.stopPropagation();') cp
             button.btn.btn-xs.btn-default.btn-edit(ng-click="mergeTasks(project, $index); $event.stopPropagation();") cat
             button.btn.btn-xs.btn-default.btn-remove(confirmation, yep='removeTaskAt($index, project)') rm
           .btn-group(ng-show="! canRemoveTasks(project)")
             button.btn.btn-xs.btn-default.btn-edit(ng-click='editTask(task); $event.stopPropagation();') vi
+            button.btn.btn-xs.btn-default.btn-edit(ng-click='cloneTask(task, project, $index); $event.stopPropagation();') cp
           span.badge
             span(ng-show="! isActive(task)") {{ timeSpent(task) | duration }}
             span(ng-show="isActive(task)"): i.icon-spinner.icon-spin

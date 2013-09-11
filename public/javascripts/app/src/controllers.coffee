@@ -83,9 +83,9 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
 
   $scope.cloneTask = (task, project, index) ->
     cloneTask =
-      name: task.name
+      name: "#{task.name} (copy)"
       entries: []
-    project.tasks.splice(index, 0, cloneTask)
+    project.tasks.splice(index + 1, 0, cloneTask)
 
   $scope.mergeProjects = (projectIndex) ->
     $scope.mergeableProjects = []
