@@ -73,13 +73,13 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
 
   $scope.cloneProject = (project, index) ->
     cloneProject =
-      name: project.name
+      name: "#{project.name} (copy)"
       tasks: []
     for task in project.tasks
       cloneProject.tasks.push
         name: task.name
         entries: []
-    $scope.frame.projects.splice(index, 0, cloneProject)
+    $scope.frame.projects.splice(index+1, 0, cloneProject)
 
   $scope.cloneTask = (task, project, index) ->
     cloneTask =

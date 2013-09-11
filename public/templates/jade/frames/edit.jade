@@ -15,7 +15,8 @@
         i.icon-reorder
         h5(contenteditable="true", ng-model="project.name")
         .btn-group
-          button.btn.btn-xs.btn-default.btn-edit(ng-click="mergeProjects($index)") cat
+          button.btn.btn-xs.btn-default.btn-edit(ng-click="cloneProject(project, $index)") cp
+          button.btn.btn-xs.btn-default.btn-edit(ng-click="mergeProjects($index)", ng-show="frame.projects.length > 1") cat
           button.btn.btn-xs.btn-default.btn-remove(confirmation, yep="removeProjectAt($index)") rm
         .pull-right
           span.badge {{ timeSpentOnProject(project) | duration }}
