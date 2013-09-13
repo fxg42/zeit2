@@ -17,4 +17,6 @@ $ npm install -g grunt-cli
 $ npm install
 $ grunt
 $ node app.js
+
+$ open http://localhost:8888
 ```
