@@ -17,7 +17,7 @@
         .btn-group
           button.btn.btn-xs.btn-default.btn-edit(ng-click="cloneProject(project, $index)") cp
           button.btn.btn-xs.btn-default.btn-edit(ng-click="mergeProjects($index)") cat
-          button.btn.btn-xs.btn-default.btn-remove(confirmation, yep="removeProjectAt($index)") rm
+        button.btn.btn-xs.btn-default.btn-remove(confirmation, yep="removeProjectAt($index)") rm
         .pull-right
           span.badge {{ timeSpentOnProject(project) | duration }}
           button.btn.btn-xs.btn-primary.btn-startnewtask(ng-click="startNewTask(project)") start new task
@@ -29,7 +29,7 @@
             button.btn.btn-xs.btn-default.btn-edit(ng-click='editTask(task); $event.stopPropagation();') vi
             button.btn.btn-xs.btn-default.btn-edit(ng-click='cloneTask(task, project, $index); $event.stopPropagation();') cp
             button.btn.btn-xs.btn-default.btn-edit(ng-click="mergeTasks(project, $index); $event.stopPropagation();") cat
-            button.btn.btn-xs.btn-default.btn-remove(confirmation, yep='removeTaskAt($index, project)') rm
+          button.btn.btn-xs.btn-default.btn-remove(confirmation, yep='removeTaskAt($index, project)', ng-show="$parent.showTaskActions") rm
           span.badge
             span(ng-show="! isActive(task)") {{ timeSpent(task) | duration }}
             span(ng-show="isActive(task)"): i.icon-spinner.icon-spin
