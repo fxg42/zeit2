@@ -27,12 +27,21 @@ app.directive 'contenteditable', ->
   restrict: 'A'
   require: '?ngModel'
   link: (scope, el, attrs, ngModel) ->
+
+    normalize = (text) -> text.replace(/<[^>]+>/g,'')
+
     ngModel.$render = ->
       el.html ngModel.$viewValue
 
-    el.bind 'keyup blur paste', ->
+    el.bind 'keyup paste', ->
       scope.$apply ->
-        ngModel.$setViewValue el.html()
+        ngModel.$setViewValue normalize(el.text())
+
+    el.bind 'blur', ->
+      scope.$apply ->
+        val = normalize(el.text())
+        el.html val
+        ngModel.$setViewValue val
 
     el.bind 'click', (e) ->
       e.stopPropagation()
