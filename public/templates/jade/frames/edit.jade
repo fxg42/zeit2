@@ -40,7 +40,7 @@
       thead
         tr
           th(rowspan=2, width="7%")
-          th(ng-repeat="project in frame.projects", colspan="{{project.tasks.length}}") {{project.name}}
+          th(ng-repeat="project in allProjects", colspan="{{project.tasks.length}}") {{project.name}}
           th(rowspan=2, width="4%") Total
         tr
           th(ng-repeat="task in allTasks", width="{{89/allTasks.length}}%") {{task.name}}

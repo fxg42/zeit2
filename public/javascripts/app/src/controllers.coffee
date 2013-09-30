@@ -178,7 +178,8 @@ app.controller 'SummaryController', ($scope) ->
   calculateTable = ->
     allTasks = []
     allDates = []
-    for project in $scope.frame.projects
+    allProjects = (project for project in $scope.frame.projects when project.tasks.length)
+    for project in allProjects
       for task in project.tasks
         entries = groupByDate(_.select(task.entries, (entry) -> entry.start and entry.end))
         allDates.push date for date in _.keys(entries)
@@ -188,6 +189,7 @@ app.controller 'SummaryController', ($scope) ->
 
     $scope.allDates = (_.uniq allDates).sort()
     $scope.allTasks = allTasks
+    $scope.allProjects = allProjects
 
   $scope.timeSpentOnDateDoingTask = (date, task) ->
     entries = task.entriesByDate[date]
