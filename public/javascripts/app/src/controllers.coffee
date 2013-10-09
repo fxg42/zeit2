@@ -154,7 +154,9 @@ app.controller 'FrameController', ($scope, $routeParams, Frames) ->
     projects: []
 
   Frames.get $routeParams.id, (frame) ->
-    $scope.frame = frame if frame
+    if frame
+      $scope.frame = frame
+      $scope.$watch('frame', $scope.saveFrame, yes)
 
 app.controller 'SummaryController', ($scope) ->
   groupByDate = (entries) ->
