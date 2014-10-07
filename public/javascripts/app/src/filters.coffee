@@ -12,3 +12,7 @@ app.filter 'duration', ->
       if hours  then parts.push "#{hours} hr#{if hours > 1 then 's' else ''}"
       if minutes then parts.push "#{minutes} min#{if minutes > 1 then 's' else ''}"
       parts.join ', '
+
+app.filter 'nozeros', ->
+  (duration) ->
+    if duration is '0.00' then '' else duration

@@ -47,13 +47,13 @@
       tbody
         tr(ng-repeat="date in allDates")
           td {{date}}
-          td(ng-repeat="task in allTasks") {{ timeSpentOnDateDoingTask(date, task) | number:2}}
-          td {{ timeSpentOnDate(date) | number:2 }}
+          td(ng-repeat="task in allTasks") {{ timeSpentOnDateDoingTask(date, task) | number:2 | nozeros }}
+          td {{ timeSpentOnDate(date) | number:2 | nozeros }}
       tfoot
         tr
           th Total
-          th(ng-repeat="task in allTasks") {{ timeSpentDoingTask(task) | number:2 }}
-          th {{ timeSpent() | number:2 }}
+          th(ng-repeat="task in allTasks") {{ timeSpentDoingTask(task) | number:2 | nozeros }}
+          th {{ timeSpent() | number:2 | nozeros }}
 
 #merge-projects-modal.modal.fade(ng-controller='MergeProjectsController', tab-index='-1', role='dialog'):.modal-dialog: .modal-content
   .modal-header
